@@ -48,4 +48,4 @@ else
 	printf "[$date_log] BACKUP ERROR...!!\n" >> $log_file
 fi
 
-find $external_storage -mtime +10 # Excluir arquivos com mais de dez dias
+find $external_storage -mtime +10 -delete # Excluir arquivos com mais de dez dias
