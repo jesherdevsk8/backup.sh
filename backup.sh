@@ -11,8 +11,7 @@
 # Testado: bash versão 5.0.17
 #
 # Torne o script executável em qualquer lugar
-# sudo ln -s $HOME/github/Backup/backup.sh /usr/local/bin/backup
-
+# Ex: sudo ln -s $HOME/github/Backup/backup.sh /usr/local/bin/backup
 # ADICIONE AO CRON CASO PREFIRA
 # execute como root - $ crontab -e
 # 0 9 * * * /usr/local/sbin/backup.sh  <- Todo dia as 09:00 horas
@@ -22,22 +21,24 @@
 # -------------- VARIÁVEIS
 
 backup_path="/home/jesher/Documentos" # Diretório para backup
-
 external_storage="/media/jesher/kingston" # Dispositivo externo de destino
-
-date_log=$(date) # data erro log
-
-date_backup=$(date "+%A %d-%m-%Y") # data do backup
-
-final_archive="backup-$date_backup.tar.gz" # Formato do arquivo
-
+destination="/media/jesher/kingston/backups" # Diretório para ser criado dentro do dispositivo externo
+date_log="$(date)" # Data erro log
+date_format=$(date "+%A %d-%m-%Y") # Data do backup
+final_archive="backup-$date_format.tar.gz" # Formato do arquivo
 log_file="/var/log/daily-backup.log" # Arquivo de log
+# Monitorar o arquvo de log
+# tail -f /var/log/daily-backup.log ou less +F /var/log/daily-backup.log
 
 # -------------- TESTES
 
+[[ "$UID" -ne "0" ]] && { echo "Precisa de Root!!!"; exit 1 ;}
+
 if ! mountpoint -q -- $external_storage; then # Pendrive plugado na máquina?
-	printf "########################## \n[$date_log] DEVICE NOT MOUNTED in: $external_storage CHECK IT.\n" >> $log_file
+	printf "[$date_log] DEVICE NOT MOUNTED in: $external_storage CHECK IT.\n" >> $log_file
 	exit 1
+else 
+	[[ ! -d "$destination" ]] && mkdir -p "$destination"
 fi
 
 # --------------- EXECUÇÃO
@@ -48,4 +49,4 @@ else
 	printf "[$date_log] BACKUP ERROR...!!\n" >> $log_file
 fi
 
-find $external_storage -mtime +10 -delete # Excluir arquivos com mais de dez dias
+find ${destination}/*.gz -mtime +5 -delete # Excluir arquivos com mais de cinco dias
