@@ -40,5 +40,5 @@ if ! mountpoint -q -- "$external_storage"; then # Device mounted ?
   exit 1
 else
   mkdir -p "$destination"
-	backup
+  backup
 fi

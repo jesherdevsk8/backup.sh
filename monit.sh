@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ---------------------- [ Script backup ] ---------------------------+
+# --------------------- [ Monitoring backup ] ------------------------+
 #        Script      : monit.sh                                       |
 #		     Description : monitoring backup                              | 
 #        Author      : Jesher Minelli <jesherdevsk8@gmail.com>        |
